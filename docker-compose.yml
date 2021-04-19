@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  employee-management-service:
+    image: employee-management-service:v1
+    container_name: employee-management-container
+    ports:
+    - 9090:9090
+#    volumes: #Commented as drive sharing is blocked by firewall or administrator
+#      - .:/code
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PORT=9090

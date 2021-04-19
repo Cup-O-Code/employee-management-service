@@ -1,0 +1,56 @@
+version: v1beta9
+images:
+  app:
+    image: rajesh2806/service-registry
+    preferSyncOverRebuild: true
+    injectRestartHelper: true
+    appendDockerfileInstructions:
+    - USER root
+deployments:
+- name: service-registry
+  helm:
+    componentChart: true
+    values:
+      replicas: 1
+      containers:
+      - image: rajesh2806/service-registry
+      service:
+        ports:
+        - port: 8765
+dev:
+  ports:
+  - imageName: app
+    forward:
+    - port: 8765
+  open:
+  - url: http://localhost:8765
+  sync:
+  - imageName: app
+    excludePaths:
+    - .git/
+    uploadExcludePaths:
+    - .idea
+    - .dockerignore
+    - devspace.yaml
+    onUpload:
+      restartContainer: true
+profiles:
+- name: production
+  description: ""
+  patches:
+  - op: remove
+    path: images.app.appendDockerfileInstructions
+  - op: remove
+    path: images.app.injectRestartHelper
+- name: interactive
+  description: ""
+  patches:
+  - op: add
+    path: dev.interactive
+    value:
+      defaultEnabled: true
+  - op: add
+    path: images.app.entrypoint
+    value:
+    - sleep
+    - "9999999999"
