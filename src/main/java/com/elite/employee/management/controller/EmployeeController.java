@@ -54,6 +54,11 @@ public class EmployeeController {
         return ResponseEntity.ok(emp);
     }
 
+    @GetMapping("/fake")
+    ResponseEntity<String> fakeData() {
+        return ResponseEntity.ok("Fakedata");
+    }
+
     @PutMapping("/employee")
     ResponseEntity<EmployeeDTO> update(EmployeeDTO employeeDTO) {
         log.info("update" + employeeDTO.toString());
